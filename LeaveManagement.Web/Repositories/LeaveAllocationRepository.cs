@@ -40,7 +40,7 @@ namespace LeaveManagement.Web.Repositories
                 .ToListAsync();
             var employee = await _userManager.FindByIdAsync(employeeId);
             var employeeAllocationModel = _mapper.Map<EmployeeAllocationVM>(employee);
-            employeeAllocationModel.leaveAllocations = _mapper.Map<List<LeaveAllocationVM>>(allocations);
+            employeeAllocationModel.LeaveAllocations = _mapper.Map<List<LeaveAllocationVM>>(allocations);
             return employeeAllocationModel;
         }
 
@@ -81,6 +81,11 @@ namespace LeaveManagement.Web.Repositories
             }
 
             await AddRangeAsync(allocations);
+        }
+
+        public async Task<LeaveAllocation?> GetEmployeeAllocation(string employeeId, int leaveTypeId)
+        {
+            return await _applicationDbContext.LeaveAllocations.FirstOrDefaultAsync(q => q.LeaveTypeId == leaveTypeId && q.EmployeeId == employeeId);   
         }
     }
 }
